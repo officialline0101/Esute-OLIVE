@@ -15,7 +15,7 @@
             /* さらに右へ */
             top: 80%;
             /* 画面中央に固定 */
-            transform: translateY(-50%) translateX(10px);
+            transform: translateY(-50%) translateX(16px);
             /* 中央配置と右ずらし */
             background: #3e3f41;
             display: flex;
@@ -96,7 +96,7 @@
             background-color: #fdfdfd;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            width: 90%;
+            width: 96%;
             max-width: 500px;
             padding: 25px;
             box-sizing: border-box;
@@ -1021,13 +1021,12 @@
             </div>
             <div class="info-text">▼メニューをお選びください▼</div>
             <div class="symptoms">
-                <button type="button" onclick="selectSymptom(this, 'treatment1')" data-category="エステ" data-price="0">フェイシャル・オールハンド</button>
-                <button type="button" onclick="selectSymptom(this, 'treatment2')" data-category="エステ" data-price="0">フェイシャル・美顔器付き</button>
-                <button type="button" onclick="selectSymptom(this, 'treatment3')" data-category="エステ" data-price="0">ボディオイルマッサージ 胸、お腹以外</button>
-                <button type="button" onclick="selectSymptom(this, 'treatment4')" data-category="エステ" data-price="0">頭ほぐし</button>
+                <button type="button" onclick="selectSymptom(this, 'treatment1')" data-category="エステ" data-price="3500">フェイシャル・オールハンド</button>
+                <button type="button" onclick="selectSymptom(this, 'treatment2')" data-category="エステ" data-price="4500">フェイシャル・美顔器付き</button>
+                <button type="button" onclick="selectSymptom(this, 'treatment4')" data-category="エステ" data-price="5000">頭ほぐし</button>
                 <button type="button" onclick="selectSymptom(this, 'treatment5')" data-category="エステ" data-price="0">汗だくだくヒートマット</button>
-                <button type="button" onclick="selectSymptom(this, 'treatment6')" data-category="エステ" data-price="0">ララピーリング【高級パック込み】</button>
-                <button type="button" onclick="selectSymptom(this, 'treatment7')" data-category="エステ" data-price="0">ララピーリング【パックなし】</button>
+                <button type="button" onclick="selectSymptom(this, 'treatment6')" data-category="エステ" data-price="0">韓国最新ララピーリング【高級パック込み】</button>
+                <button type="button" onclick="selectSymptom(this, 'treatment7')" data-category="エステ" data-price="0">韓国最新ララピーリング【パックなし】</button>
                 <button type="button" onclick="selectSymptom(this, 'treatment8')" data-category="エステ" data-price="0">ケミカルピーリング</button>
             </div>
             <div class="labeltyuuou">
@@ -1057,8 +1056,6 @@
                 <button type="button" onclick="selectSymptom(this, 'treatment13')" data-category="レディース脱毛" data-price="0">顔全体、両脇、へそ周り、ひじ下など</button>
                 <button type="button" onclick="selectSymptom(this, 'treatment14')" data-category="レディース脱毛" data-price="0">お腹、背面</button>
                 <button type="button" onclick="selectSymptom(this, 'treatment15')" data-category="レディース脱毛" data-price="0">ヒップ、太もも、膝下</button>
-                <button type="button" onclick="selectSymptom(this, 'treatment16')" data-category="レディース脱毛" data-price="0">VIO・顔付き・コースの方のみ</button>
-                <button type="button" onclick="selectSymptom(this, 'treatment17')" data-category="レディース脱毛" data-price="0">VIO・顔なし・コースの方のみ</button>
             </div>
         </div>
 
@@ -1069,7 +1066,6 @@
             <div class="info-text">▼メニューをお選びください▼</div>
             <div class="symptoms">
                 <button type="button" onclick="selectSymptom(this, 'treatment18')" data-category="メンズ脱毛" data-price="0">ヒゲ脱毛</button>
-                <button type="button" onclick="selectSymptom(this, 'treatment19')" data-category="メンズ脱毛" data-price="0">ヒゲ脱毛・コースの方のみ</button>
                 <button type="button" onclick="selectSymptom(this, 'treatment20')" data-category="メンズ脱毛" data-price="0">手の指、足の指など</button>
                 <button type="button" onclick="selectSymptom(this, 'treatment21')" data-category="メンズ脱毛" data-price="0">口周り、えりあしなど</button>
                 <button type="button" onclick="selectSymptom(this, 'treatment22')" data-category="メンズ脱毛" data-price="0">顔全体、両脇、へそ周り、ひじ下など</button>
@@ -1146,7 +1142,7 @@
 
         document.addEventListener('DOMContentLoaded', function () {
             liff.init({
-                liffId: '2005254357-zKma9BZk'
+                liffId: '2008720322-b1ILeVDy'
             }).then(() => {
                 console.log('LIFF初期化成功');
             }).catch((err) => {
@@ -1158,38 +1154,46 @@
 
         // 訪問回数ごとの時間設定 (例：初めて=20分、2回目以降=15分)
         let visitTimes = {
-            '1回目〈30分〉': 30,
-            '2回目以降〈0分〉': 0
+            '1回目': 0,
+            '2回目以降': 0
         };
 
         let selectedVisitTime = 0; // 訪問回数で選択された時間
 
         // 訪問回数ごとの時間設定 (例：初めて=20分、2回目以降=15分)
         let irradiationsTimes = {
-            '眉カット〈30分〉': 30,
-            '襟足〈30分〉': 30,
-            '背中(キャミソールライン)〈30分〉': 30,
-            '背中(腰まで)〈30分〉': 30,
-            'デコルテ〈30分〉': 30,
-            '腕〈30分〉': 30,
-            '保湿パック〈30分〉': 30,
-            'ベーシックマッサージ(パック付き)〈30分〉': 30,
-            'リラックスマッサージの(パック付き)〈30分〉': 30,
-            '美白パック〈30分〉': 30
+            'リフトアップ（15分・1,200円）': 30,
+            '海藻パック（15分・1,300円）': 30,
+            'ゴールドパック（15分・1,500円）': 30,
+            '石膏パック（20分・1,800円）': 30,
+            'クイックマッサージ（5分・500円）': 10,
+            'クイックマッサージ（10分・1,000円）': 15,
+            'クイックマッサージ（15分・1,500円）': 20
         };
 
         let selectedirradiationsTime = 0; // 訪問回数で選択された時間
 
-        let menuTimes = {
-            '和装プラン〈30分〉': 30,
-            '洋装プランA〈60分〉': 60,
-            '洋装プランB〈120分〉': 420,
-            '洋装プランC〈30分〉': 30,
-            'リラックスコース〈60分〉': 60,
-            'ベーシックコース〈30分〉': 30,
-            'スピードコース〈90分〉': 90
-        };
-
+let menuTimes = {
+    'フェイシャル・オールハンド': 40,
+    'フェイシャル・美顔器付き': 60,
+    'ボディオイルマッサージ 胸、お腹以外': 90,
+    '頭ほぐし': 30,
+    '汗だくだくヒートマット': 90,
+    '韓国最新ララピーリング【高級パック込み】': 60,
+    '韓国最新ララピーリング【パックなし】': 40,
+    'ケミカルピーリング': 60,
+    'VIO・顔付き': 90,
+    'VIO・顔なし': 90,
+    'VIO・顔付き・コースの方のみ': 90,
+    'VIO・顔なし・コースの方のみ': 90,
+    'ヒゲ脱毛': 60,
+    'ヒゲ脱毛・コースの方のみ': 60,
+    '手の指、足の指など': 30,
+    '口周り、えりあしなど': 30,
+    '顔全体、両脇、へそ周り、ひじ下など': 60,
+    'お腹、背面': 60,
+    'ヒップ、太もも、膝下': 60
+};
 
         let selectedMenuTime = 0;
 
@@ -1272,16 +1276,8 @@
         </div>
         <hr>
         <div class="info-row">
-            <p>${totalTimeText}</p>
-        </div>
-        <hr>
-        <div class="info-row">
             <p>${selectedDateText}</p>
             <button class="edit-button" onclick="scrollToElement('calendar1')">修正</button>
-        </div>
-        <hr>
-        <div class="info-row">
-            <p>${totalAmountText}</p>
         </div>
         <hr>
     `;
@@ -1727,14 +1723,14 @@
                 : 'メニュー未選択';
 
             // irradiationsCountの整形（nullチェック）
-            const irradiationsText = formData.irradiationsCount || 'なし';
+            const irradiationsText = formData.irradiationsCount || '';
 
             liff.sendMessages([{
                 type: 'text',
                 text: `【予約フォーム】\nお名前：${formData.name}\n電話番号：${formData.phone}\nご来店回数：${formData.visitCount}\nコース：${formData.selectedMenu}\nメニュー：${selectedSymptomText},${irradiationsText}\n希望日時：\n${formData.dates[0]}\nメッセージ：${formData.message}`
             }]).then(() => {
                 /* メッセージ送信成功時の処理 */
-                alert('当日キャンセルは無いようにお願いいたします。');
+                alert('当日キャンセルの無いようにお願いいたします。');
                 /* LIFFウィンドウを閉じる */
                 liff.closeWindow();
             }).catch((err) => {
@@ -1763,7 +1759,7 @@
                 return;
             }
 
-            const url = 'https://script.google.com/macros/s/AKfycbwCxnJaxGZ46c3TnnesuZcD_zuxuVoSHoDHo5MxkRzChcK5vZDwBs4HstzkXO-KLyuDYA/exec' +
+            const url = 'https://script.google.com/macros/s/AKfycbw-bqE1_4UCra-tLjDW3wpkvlnidXFpVdrUqT72XHgcQsSuVAStxSBorm_FK_iXV7u7/exec' +
                 `?startTime=${startTime.toISOString()}&endTime=${endTime.toISOString()}`;
 
             try {
