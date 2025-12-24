@@ -694,6 +694,7 @@
     box-shadow: 0 0 0 3px #2c2c2c
         }
 
+
         /* 必須マークのスタイル */
         .required {
             color: #ffffff;
@@ -1144,7 +1145,7 @@
 
         document.addEventListener('DOMContentLoaded', function () {
             liff.init({
-                liffId: '2008720322-b1ILeVDy'
+                liffId: '2005254357-zKma9BZk'
             }).then(() => {
                 console.log('LIFF初期化成功');
             }).catch((err) => {
@@ -1724,8 +1725,10 @@ let menuTimes = {
                 ? formData.selectedSymptom.map(item => `${item.name}`).join(',')
                 : 'メニュー未選択';
 
-            // irradiationsCountの整形（nullチェック）
-            const irradiationsText = formData.irradiationsCount || '';
+// irradiationsCountの整形（存在する場合のみカンマ付きで出力）
+const irradiationsText = formData.irradiationsCount
+    ? `,${formData.irradiationsCount}`
+    : '';
 
             liff.sendMessages([{
                 type: 'text',
@@ -1761,7 +1764,7 @@ let menuTimes = {
                 return;
             }
 
-            const url = 'https://script.google.com/macros/s/AKfycbw-bqE1_4UCra-tLjDW3wpkvlnidXFpVdrUqT72XHgcQsSuVAStxSBorm_FK_iXV7u7/exec' +
+            const url = 'https://script.google.com/macros/s/AKfycbyqR0cxr3hAjQtyj2Zfcnp4k5_utX1YESZB8NEq4QDJlJXcyWlI0FkP35nXAAC0J1qQ/exec' +
                 `?startTime=${startTime.toISOString()}&endTime=${endTime.toISOString()}`;
 
             try {
@@ -2088,4 +2091,3 @@ let menuTimes = {
 </body>
 
 </html>
-
