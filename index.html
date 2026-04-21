@@ -1030,7 +1030,6 @@
                 <button type="button" onclick="selectSymptom(this, 'treatment5')" data-category="エステ" data-price="0">汗だくだくヒートマット</button>
                 <button type="button" onclick="selectSymptom(this, 'treatment6')" data-category="エステ" data-price="0">韓国最新ララピーリング【高級パック込み】</button>
                 <button type="button" onclick="selectSymptom(this, 'treatment7')" data-category="エステ" data-price="0">韓国最新ララピーリング【パックなし】</button>
-                <button type="button" onclick="selectSymptom(this, 'treatment8')" data-category="エステ" data-price="0">ケミカルピーリング</button>
             </div>
             <div class="labeltyuuou">
                 <span class="highlight-text">エステ：オプション</span>
@@ -1043,6 +1042,17 @@
                 <button type="button" id="gooirradiations" onclick="selectirradiations(this)" data-price="0">クイックマッサージ（5分・500円）</button>
                 <button type="button" id="rokuirradiations" onclick="selectirradiations(this)" data-price="0">クイックマッサージ（10分・1,000円）</button>
                 <button type="button" id="nanairradiations" onclick="selectirradiations(this)" data-price="0">クイックマッサージ（15分・1,500円）</button>
+                <button type="button" id="bihakuirradiations" onclick="selectirradiations(this)" data-price="0">美白パック（15分・1,200円）</button>
+            </div>
+            <!-- ララピーリング選択時のみ表示される追加オプション -->
+            <div id="lala-peeling-options" style="display: none;">
+                <div class="labeltyuuou">
+                    <span class="highlight-text">ララピーリング：追加オプション</span>
+                </div>
+                <div class="irradiations">
+                    <button type="button" id="biganki_irradiations" onclick="selectirradiations(this)" data-price="0">美顔器（20分・1,000円）</button>
+                    <button type="button" id="facial_massage_irradiations" onclick="selectirradiations(this)" data-price="0">フェイシャルマッサージ（20分・1,500円）</button>
+                </div>
             </div>
         </div>
 
@@ -1171,7 +1181,10 @@
             '石膏パック（20分・1,800円）': 30,
             'クイックマッサージ（5分・500円）': 10,
             'クイックマッサージ（10分・1,000円）': 15,
-            'クイックマッサージ（15分・1,500円）': 20
+            'クイックマッサージ（15分・1,500円）': 20,
+            '美白パック（15分・1,200円）': 30,
+            '美顔器（20分・1,000円）': 20,
+            'フェイシャルマッサージ（20分・1,500円）': 20
         };
 
         let selectedirradiationsTime = 0; // 訪問回数で選択された時間
@@ -1184,7 +1197,6 @@ let menuTimes = {
     '汗だくだくヒートマット': 90,
     '韓国最新ララピーリング【高級パック込み】': 60,
     '韓国最新ララピーリング【パックなし】': 40,
-    'ケミカルピーリング': 60,
     'VIO・顔付き': 90,
     'VIO・顔なし': 90,
     'VIO・顔付き・コースの方のみ': 90,
@@ -1379,6 +1391,9 @@ let menuTimes = {
                 menuPrice += parseInt(btn.getAttribute('data-price'), 10) || 0;
             });
 
+            // ララピーリング追加オプションの表示/非表示制御
+            updateLalaPeelingOptions();
+
             // カレンダー更新
             if (typeof fetchAvailability === 'function') {
                 fetchAvailability(currentDate);
@@ -1409,7 +1424,7 @@ let menuTimes = {
                 } else if (treatmentId === 'treatment7') {
                     html = `<div style="text-align: left;"><strong>所要時間：40分</strong><br></div><div style="text-align: right;"><strong>料金：8,500円</strong></div>`;
                 } else if (treatmentId === 'treatment8') {
-                    html = `<div style="text-align: left;"><strong>所要時間：60分</strong><br></div><div style="text-align: right;"><strong>料金：8,500円</strong></div>`;
+                    html = ``;  // ケミカルピーリング削除済み
                 } else if (treatmentId === 'treatment9') {
                     html = `<div style="text-align: left;"><strong>所要時間：70分</strong><br></div><div style="text-align: right;"><strong>料金：14,800円</strong></div>`;
                 } else if (treatmentId === 'treatment10') {
@@ -1536,6 +1551,59 @@ let menuTimes = {
                 }
             }
 
+            // ララピーリング追加オプションの表示/非表示制御
+            updateLalaPeelingOptions();
+
+            updateDisplayInfo();
+        }
+
+        // ララピーリング選択時のみ追加オプションを表示する関数
+        function updateLalaPeelingOptions() {
+            const lalaPeelingOptions = document.getElementById('lala-peeling-options');
+            if (!lalaPeelingOptions) return;
+
+            // 現在選択中のメニューにララピーリングが含まれているかチェック
+            const hasLalaPeeling = selectedSymptom.some(item =>
+                item.name === '韓国最新ララピーリング【高級パック込み】' ||
+                item.name === '韓国最新ララピーリング【パックなし】'
+            );
+
+            if (hasLalaPeeling) {
+                lalaPeelingOptions.style.display = 'block';
+            } else {
+                // ララピーリングが選択されていない場合、追加オプションを非表示にし、選択も解除
+                lalaPeelingOptions.style.display = 'none';
+                const lalaButtons = lalaPeelingOptions.querySelectorAll('.irradiations button');
+                lalaButtons.forEach(btn => {
+                    if (btn.classList.contains('active')) {
+                        btn.classList.remove('active');
+                    }
+                });
+                // オプション時間と価格を再計算
+                recalcIrradiations();
+            }
+        }
+
+        // オプションの時間と価格を再計算する関数
+        function recalcIrradiations() {
+            const selectedButtons = document.querySelectorAll('.irradiations button.active');
+            const selectedIrradiations = Array.from(selectedButtons).map(btn => btn.innerText);
+            irradiationsCount = selectedIrradiations.join(', ');
+
+            optionsPrice = 0;
+            let totalirradiationsTime = 0;
+            selectedButtons.forEach(btn => {
+                const price = parseInt(btn.getAttribute('data-price'), 10);
+                optionsPrice += price;
+                const irradiationName = btn.innerText;
+                const irradiationTime = irradiationsTimes[irradiationName] || 0;
+                totalirradiationsTime += irradiationTime;
+            });
+            selectedirradiationsTime = totalirradiationsTime;
+
+            if (typeof fetchAvailability === 'function') {
+                fetchAvailability(currentDate);
+            }
             updateDisplayInfo();
         }
 
