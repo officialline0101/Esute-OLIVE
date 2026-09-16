@@ -1420,9 +1420,11 @@ let menuTimes = {
                 } else if (treatmentId === 'treatment5') {
                     html = `<div style="text-align: left;"><strong>所要時間：60分</strong><br></div><div style="text-align: right;"><strong>料金：2,500円</strong></div>`;
                 } else if (treatmentId === 'treatment6') {
-                    html = `<div style="text-align: left;"><strong>所要時間：60分</strong><br></div><div style="text-align: right;"><strong>料金：9,800円</strong></div>`;
+                    // 初回のみ9,800円、2回目以降は11,000円
+                    html = `<div style="text-align: left;"><strong>所要時間：60分</strong><br></div><div style="text-align: right;"><strong>料金：${visitCount === '1回目' ? '9,800' : '11,000'}円</strong></div>`;
                 } else if (treatmentId === 'treatment7') {
-                    html = `<div style="text-align: left;"><strong>所要時間：40分</strong><br></div><div style="text-align: right;"><strong>料金：6,500円</strong></div>`;
+                    // 初回のみ6,500円、2回目以降は8,500円
+                    html = `<div style="text-align: left;"><strong>所要時間：40分</strong><br></div><div style="text-align: right;"><strong>料金：${visitCount === '1回目' ? '6,500' : '8,500'}円</strong></div>`;
                 } else if (treatmentId === 'treatment8') {
                     html = ``;  // ケミカルピーリング削除済み
                 } else if (treatmentId === 'treatment9') {
@@ -1462,6 +1464,7 @@ let menuTimes = {
                 // 内容が用意できた時だけ移動＆表示
                 if (html) {
                     treatmentText.innerHTML = html;
+                    treatmentText.dataset.treatmentId = treatmentId;
                     button.parentNode.insertBefore(treatmentText, button.nextSibling);
                     treatmentText.style.display = 'block';
                 } else {
@@ -1684,8 +1687,23 @@ let menuTimes = {
 
             console.log('選択された訪問回数の時間:', selectedVisitTime);
 
+            // ララピーリングの料金表示中なら来店回数に合わせて表示を更新
+            updateLalaPeelingPriceDisplay();
+
             // カレンダーを更新するために取得する日付を渡す
             fetchAvailability(currentDate);
+        }
+
+        // ララピーリングは初回のみ割引料金（高級パック込み9,800円／パックなし6,500円）
+        function updateLalaPeelingPriceDisplay() {
+            const treatmentText = document.getElementById('treatment-text');
+            if (!treatmentText || treatmentText.style.display === 'none') return;
+            const id = treatmentText.dataset.treatmentId;
+            if (id === 'treatment6') {
+                treatmentText.innerHTML = `<div style="text-align: left;"><strong>所要時間：60分</strong><br></div><div style="text-align: right;"><strong>料金：${visitCount === '1回目' ? '9,800' : '11,000'}円</strong></div>`;
+            } else if (id === 'treatment7') {
+                treatmentText.innerHTML = `<div style="text-align: left;"><strong>所要時間：40分</strong><br></div><div style="text-align: right;"><strong>料金：${visitCount === '1回目' ? '6,500' : '8,500'}円</strong></div>`;
+            }
         }
 
         function showMenu(menu) {
